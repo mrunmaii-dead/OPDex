@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            background-color: #737873;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+        main {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        h2 {
+            color: #333;
+        }
+        a button {
+            background-color: #aa7dba;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px 0;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        a button:hover {
+            background-color: #e290e1;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul li {
+            background-color: #f9f9f9;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        form {
+            margin-top: 20px;
+        }
+        form button {
+            background-color: #aa7dba;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        form button:hover {
+            background-color: #aa7dba;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome Doctor XYZ</h1>
+    </header>
+    <main>
+        <a href="/doctor/" ><button type="button">Appointments</button></a>
+        
+        <ul>
+            {% for profile in profiles %}
+                {% if profile.id == pat_id %}
+                    <li>
+                        <p>Signed in as: {{ profile.doctor }}</p>
+                        <p>Patient's Name: {{ profile.name }}</p>
+                        <p>Patient's Complaint : {{ profile.complaint }}</p>
+                        <a href = 'tests'><button type="button">Order Tests</button></a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        <form method="post" > <!-- action yaane submit karne kebaad kya kare-->
+            <a href = 'info'><button type="button">Medical Information</button></a>
+            {% csrf_token %}
+            {{ form.as_p }}
+            
+            <h2>Medicines prescribed</h2>
+            <table border="1">
+                <tbody id="medicine-table">
+                {{ formset.management_form }}
+                <thead style="background-color: #f0f0f0;">
+                    <tr >
+                        <th>Medicine Name</th>
+                        <th>Morning</th>
+                        <th>Afternoon</th>
+                        <th>Evening</th>
+                        <th>Night</th>
+                        <th>Dose</th>
+                        <th>Duration(days)</th>
+                        <th colspan="2">Before/After Meal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for form in formset %}
+                        <tr>
+                            <td>{{ form.medicine_name }}</td>
+                            <td>{{ form.morning }}</td>
+                            <td>{{ form.afternoon }}</td>
+                            <td>{{ form.evening }}</td>
+                            <td>{{ form.night }}</td>
+                            <td>{{ form.dose }}</td>
+                            <td>{{ form.duration }}</td>
+                            <td>{{ form.bef }}</td>
+                            <td> {{ form.aft }}</td>
+                            <td><button type="button" class="remove-row">Remove</button></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="button" id="add-row">Add Medicine</button>
+            
+
+    <button type="submit">Submit</button> 
+        </form>
+        <script>
+            document.getElementById('add-row').addEventListener('click', function() {
+                var table = document.getElementById('medicine-table');
+                var newRow = table.insertRow();
+                var formIdx = table.rows.length - 1;
+                newRow.innerHTML = `
+                    <td><input type="text" name="medicines-${formIdx}-medicine_name" maxlength="20"></td>
+                    <td><input type="checkbox" name="medicines-${formIdx}-morning"></td>
+                    <td><input type="checkbox" name="medicines-${formIdx}-afternoon"></td>
+                    <td><input type="checkbox" name="medicines-${formIdx}-evening"></td>
+                    <td><input type="checkbox" name="medicines-${formIdx}-night"></td>
+                    <td><input type="text" name="medicines-${formIdx}-dose" maxlength="20"></td>
+                    <td><input type="number" name="medicines-${formIdx}-duration" maxlength="20" step = "1" default = 1></td>
+                    <td><input type="checkbox" name="medicines-${formIdx}-bef" maxlength="20"></td>
+                    <td><input type="checkbox" name="medicines-${formIdx}-aft" maxlength="20"></td>
+                    <td><button type="button" class="remove-row">Remove</button></td>
+                `;
+                document.getElementsByName('medicines-TOTAL_FORMS')[0].value = formIdx + 1;
+            });
+            document.addEventListener('click', function(e) {
+                if (e.target && e.target.className == 'remove-row') {
+                    var row = e.target.closest('tr');
+                    row.remove();
+                    var rows = document.querySelectorAll('#medicine-table tr');
+                    for (var i = 0; i < rows.length; i++) {
+                        rows[i].querySelectorAll('input').forEach(function(input) {
+                            input.name = input.name.replace(/\d+/, i);
+                        });
+                    }
+                    document.getElementsByName('medicines-TOTAL_FORMS')[0].value = rows.length;
+                }
+            });
+        </script>
+    </main>
+</body>
+</html>

@@ -1,0 +1,12 @@
+<html>
+    {% for info in inf %}
+    {% if info.first_name == pat_name %}
+        <li>
+            <p>patients name: {{ info.first_name }} {{info.last_name}}</p>
+            <p>Patient's Age: {{ info.age }}</p>
+        
+            <a href = ''><button type="button">Return back</button></a>
+        </li>
+    {% endif %}
+{% endfor %}
+</html>
