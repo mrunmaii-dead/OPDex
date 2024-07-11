@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Medical Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        p {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.6;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Patient's Medical Information</h1>
+        {% for info in inf %}
+            {% if info.first_name|lower == pat_name.first_name|lower %}
+                <p><strong>Patient's Name:</strong> {{ info.first_name }} {{ info.last_name }}</p>
+                <p><strong>Patient's Age:</strong> {{ info.age }}</p>
+                <p><strong>Height:</strong> {{ info.height }}</p>
+                <p><strong>Weight:</strong> {{ info.weight }}</p>
+                <p><strong>Blood Group:</strong> {{ info.blood_group }}</p>
+                <p><strong>Gender:</strong> {{ info.gender }}</p>
+                <p><strong>Allergens/Chronic Issues:</strong> {{ info.allergen }}</p>
+                <a href="/doctor/{{pat_id}}"><button type="button">Return Back</button></a>
+            {% endif %}
+        {% endfor %}
+    </div>
+</body>
+</html>

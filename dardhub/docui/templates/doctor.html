@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+        main {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        h2 {
+            color: #333;
+        }
+        a button, form button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px 0;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        a button:hover, form button:hover {
+            background-color: #0056b3;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul li {
+            background-color: #f9f9f9;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .remove-row {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .remove-row:hover {
+            background-color: #ff1a1a;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome Doctor XYZ</h1>
+    </header>
+    <main>
+        <a href="/doctor/"><button type="button">Appointments</button></a>
+        <ul>
+            {% for profile in profiles %}
+                {% if profile.id == pat_id %}
+                    <li>
+                        <p>Signed in as: {{ profile.doctor }}</p>
+                        <p>Patient's Name: {{ profile.name }}</p>
+                        <p>Patient's Complaint : {{ profile.complaint }}</p>
+                        <a href='tests'><button type="button">Order Tests</button></a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        <form method="post">
+            <a href='info'><button type="button">Medical Information</button></a>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <h2>Medicines prescribed</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Medicine Name</th>
+                        <th>Morning</th>
+                        <th>Afternoon</th>
+                        <th>Evening</th>
+                        <th>Night</th>
+                        <th>Dose</th>
+                        <th>Duration (days)</th>
+                        <th colspan="2">Before/After Meal</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="medicine-table">
+                    {{ formset.management_form }}
+                    {% for form in formset %}
+                        <tr>
+                            <td>{{ form.medicine_name }}</td>
+                            <td>{{ form.morning }}</td>
+                            <td>{{ form.afternoon }}</td>
+                            <td>{{ form.evening }}</td>
+                            <td>{{ form.night }}</td>
+                            <td>{{ form.dose }}</td>
+                            <td>{{ form.duration }}</td>
+                            <td>{{ form.bef }}</td>
+                            <td>{{ form.aft }}</td>
+                            <td><button type="button" class="remove-row">Remove</button></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit">Submit</button>
+        </form>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                document.querySelectorAll('.remove-row').forEach(function (button) {
+                    button.addEventListener('click', function () {
+                        var row = button.closest('tr');
+                        row.remove();
+                        var rows = document.querySelectorAll('#medicine-table tr');
+                        for (var i = 0; i < rows.length; i++) {
+                            rows[i].querySelectorAll('input').forEach(function (input) {
+                                input.name = input.name.replace(/\d+/, i);
+                            });
+                        }
+                        document.getElementsByName('medicines-TOTAL_FORMS')[0].value = rows.length;
+                    });
+                });
+            });
+        </script>
+          <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+          <script>
+              $(document).ready(function() {
+                  function toggleDatePicker() {
+                      if ($('#id_refer_back').val() === 'yes') {
+                          $('#id_refer_back_date').show();
+                      } else {
+                          $('#id_refer_back_date').hide();
+                      }
+                  }
+      
+                  toggleDatePicker();  // Initial call to set the correct state on load
+      
+                  $('#id_refer_back').change(function() {
+                      toggleDatePicker();
+                  });
+              });
+          </script>
+    </main>
+</body>
+</html>
+

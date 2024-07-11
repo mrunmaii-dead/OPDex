@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Patient Appointments You Have</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h2 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h2>The Following Appointments Are the Ones You Have:</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Patient Name</th>
+                <th>Doctor</th>
+                <th>Complaint</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pat in profiles %}
+            <tr>
+                <td>{{ pat.name }}</td>
+                <td>{{ pat.doctor }}</td>
+                
+                <td><a href="/doctor/{{ pat.id }}/" id = "attend - {{pat.id}}" data-id = "{{pat.id}}"> {{ pat.complaint }}</a></td>
+                <td id = 'status - {{pat.id}}' class = "status">{{ pat.status }}</td>
+                
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <script>
+     
+   
+
+ 
+    </script>
+</body>
+</html>

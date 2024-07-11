@@ -1,0 +1,44 @@
+<!-- ordertest.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Tests</title>
+</head>
+<body>
+    <h2>Order Tests</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <!-- Tests Form Fields -->
+        {{ tests_form.as_p }}
+        
+        <br><br>
+        
+        <!-- Test Forms in Table -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Test Name</th>
+                    <th>Date to be Done</th>
+                    <th>Additional Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for form in test_forms %}
+                <tr>
+                    <td>{{ form.test_name }}</td>
+                    <td>{{ form.date_to_be_done }}</td>
+                    <td>{{ form.additional_notes }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <br>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
+
