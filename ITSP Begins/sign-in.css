@@ -1,0 +1,51 @@
+h1{
+    text-align: center;
+    color: white;
+}
+
+body{
+    background-image: url("images/bg.jpg");
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+.Doctor{
+    background-image: url("images/doc.jpeg");
+    background-size: cover;
+    color: white;
+}
+
+.Patient{
+    background-image: url("images/patient.png");
+    background-size: cover;
+    color: white;
+}
+
+.ButtonGrp{
+    display: flex;
+    justify-content: center;
+}
+
+.Staff{
+    background-image: url("images/staff.png");
+    background-size: cover;
+    color:black;
+}
+
+button{
+    width: 30%;
+    padding-top: 20%;
+    padding-bottom: 20%;
+    margin:0 auto;
+    text-align: center;
+    font-size: xx-large;
+    cursor: pointer;
+}
+
+button:hover {
+    box-shadow: 0 24px 32px 0 rgba(11, 11, 11, 0.578), 0 34px 100px 0 rgba(25, 25, 25, 0.66);
+}
+
+button:active {
+    transform: translateY(4px);
+  }
